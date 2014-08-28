@@ -1,0 +1,25 @@
+package ye2libs.utils;
+
+message Packet {
+	required int32 version = 1;
+	enum CRYPT {
+		CRYPT_NONE = 0;
+		CRYPT_RSA = 1;
+		CRYPT_AES = 2;
+	}
+
+	required int32 crypt_type = 2;
+	required bytes cookie = 3;
+	required int32 func_id = 4;
+	required int32 uin = 5;
+	optional bytes data = 6;
+	optional int32 ret_code = 7;
+	optional string device_id = 8;
+
+	enum COMPRESS {
+		COMPRESS_NONE = 0;
+		COMPRESS_ZIP = 1;
+		COMPRESS_7Z = 2;
+	}
+	required int32 compress = 9;
+}

@@ -1,0 +1,189 @@
+option java_package = "net.sf.throughglass.proto";
+
+enum FuncID {
+	FUNCID_UPLOAD_PHOTO = 100;
+	FUNCID_POST = 101;
+	FUNCID_SYNC = 102;
+	FUNCID_DOWNLOAD_PHOTO = 103;
+	FUNCID_AUTH = 104;
+
+	FUNCID_APNS_REG = 800;
+	FUNCID_MPNS_REG = 801;
+	FUNCID_GCM_REG = 802;
+
+	FUNCID_UPDATE_WECHAT_ACCOUNT = 1001;
+	FUNCID_GET_WECHAT_UPLOAD_TOKEN = 1002;
+}
+
+enum Error {
+	ERR_NONE = 0;
+	ERR_SYS = -1;
+	ERR_ARG = -2;
+	ERR_PASS = -3;
+	ERR_NOUSER = -4;
+	ERR_SESSION_TIMEOUT = -13;
+}
+
+message BaseRequest {
+	required int32 client_version = 1;
+	required int32 uin = 2;
+}
+
+message BaseResponse {
+	required int32 err_code = 1;
+	optional string err_str = 2;
+}
+
+message RegisterDevice {
+	message Request {
+		required BaseRequest base_request = 1;
+		required string device_id = 2;
+	}
+
+	message Response {
+		required BaseResponse base_response = 1;
+		required string username = 2;
+		required int32 uin = 3;
+	}
+}
+
+message UploadPhoto {
+	message Request {
+		required BaseRequest base_request = 1;
+		required int32 id = 2;
+		required int32 offset = 3;
+		required int32 length = 4;
+		required int32 total = 5;
+		required bytes buf = 6;
+		required string username = 7;
+		optional string comment = 8;
+	}
+
+	message Response {
+		required BaseResponse base_response = 1;
+		required int32 id = 2;
+		required int32 offset = 3;
+	}
+
+}
+
+message Post {
+	message Request {
+		required BaseRequest base_request = 1;
+		repeated string media_id = 2;
+		required string comment = 3;
+	}
+
+	message Response {
+		required BaseResponse base_response = 1;
+		required int32 id = 2;
+	}
+
+}
+
+message BindAccount {
+	required string openid = 1;
+	required string type = 2;
+	required string access_token = 3;
+	optional string refresh_token = 4;
+	required int32 expires_in = 5;
+	optional string display = 6;
+	optional string extra = 7;
+
+}
+
+message GetAccounts {
+	message Request {
+		required BaseRequest base_request = 1;
+	}
+
+	message Response {
+		required BaseResponse base_response = 1;
+		repeated BindAccount bind_accounts = 2;
+	}
+}
+
+message UpdateAccounts {
+	message Request {
+		required BaseRequest base_request = 1;
+		repeated BindAccount bind_accounts = 2;
+	}
+
+	message Response {
+		required BaseResponse base_response = 1;
+	}
+}
+
+message UpdateWeChatAccount {
+	message Request {
+		required BaseRequest base_request = 1;
+		required string code = 2;
+	}
+
+	message Response {
+		required BaseResponse base_response = 1;
+		required BindAccount bind_account = 2;
+	}
+}
+
+message GetWeChatUploadToken {
+	message Request {
+		required BaseRequest base_request = 1;
+		required string type = 2;
+	}
+
+	message Response {
+		required BaseResponse base_response = 1;
+		required string token = 2;
+	}
+}
+
+message Auth {
+	message Request {
+		required BaseRequest base_request = 1;
+		required string username = 2;
+		required string password = 3;
+	}
+
+	message Response {
+		required BaseResponse base_response = 1;
+		required int32 uin = 2;
+		optional bytes session_key = 3;
+	}
+
+}
+
+message MpnsReg {
+	message Request {
+		required BaseRequest base_request = 1;
+		required string uri = 2;
+	}
+
+	message Response {
+		required BaseResponse base_response = 1;
+	}
+
+}
+
+message ApnsReg {
+	message Request {
+		required BaseRequest base_request = 1;
+		required string token = 2;
+	}
+
+	message Response {
+		required BaseResponse base_response = 1;
+	}
+
+}
+
+message GcmReg {
+	message Request {
+		required BaseRequest base_request = 1;
+	}
+
+	message Response {
+		required BaseResponse base_response = 1;
+	}
+}
+
