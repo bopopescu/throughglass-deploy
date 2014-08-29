@@ -8,6 +8,7 @@ import urllib2
 import json
 import datetime
 import time
+import logging
 
 from model import config
 
@@ -25,7 +26,7 @@ def load_token():
 
 
 def update_token():
-    # print config.wxapi_config
+    logging.debug('access token file: %s' % os.path.abspath('record/access_token.txt'))
 
     url = 'https://api.weixin.qq.com/cgi-bin/token' \
           '?grant_type=client_credential' \

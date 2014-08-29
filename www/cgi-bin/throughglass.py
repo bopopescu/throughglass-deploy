@@ -6,6 +6,7 @@ import auth
 import get_wechat_upload_token
 import post
 import update_wechat_account
+import logging
 
 urls = (
     '/cgi-bin/auth.py', 'AuthHandler',
@@ -16,6 +17,7 @@ urls = (
 
 app = web.application(urls, globals())
 
+logging.basicConfig(level=logging.DEBUG)
 
 class AuthHandler:
     def __init__(self):
