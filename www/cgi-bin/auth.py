@@ -1,20 +1,15 @@
 # -*- coding: UTF-8 -*-
 
-# enable debugging
 
 from ye2pack import pack_utils, works_pb2
 from ye2pack.works_pb2 import Auth
 from ye2pack.pack_pb2 import Packet
 import rsa
+import read_buf
 
 
 def application(env, start_response):
-
-	response_headers = [
-		('Content-type', 'text/plain')
-	]
-
-	start_response('200 OK', response_headers)
+	req_buf = read_buf.read(env)
 
 	private_key = rsa.PrivateKey(
 		11176276734117980437, 65537, 6939363295624337393, 12879322847, 867768971)
@@ -37,7 +32,13 @@ def application(env, start_response):
 		encrypt=Packet.CRYPT_NONE,
 		key='password')
 
-	yield resp_buf
+	# start response
+	response_headers = [
+		('Content-Type', 'text/plain')
+		('Content-Length', str(len(resp_buf)))
+	]
+	start_response('200 OK', response_headers)
+	return [resp_buf]
 
 
 
