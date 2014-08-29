@@ -6,8 +6,8 @@ import auth
 import update_wechat_account
 
 urls = (
-    '/auth.py', 'AuthHandler',
-    '/update_wechat_account.py', 'UpdateWeChatAccountHandler',
+    '/cgi-bin/auth.py', 'AuthHandler',
+    '/cgi-bin/update_wechat_account.py', 'UpdateWeChatAccountHandler',
 )
 
 app = web.application(urls, globals())
