@@ -6,10 +6,11 @@ from ye2pack.works_pb2 import Auth
 from ye2pack.pack_pb2 import Packet
 import rsa
 import read_buf
+import logging
 
 
 def application(env, start_response):
-    req_buf = read_buf.read(env)
+    req_buf = read_buf.init(env)
 
     private_key = rsa.PrivateKey(
         11176276734117980437, 65537, 6939363295624337393, 12879322847, 867768971)
@@ -18,7 +19,7 @@ def application(env, start_response):
     auth_req = Auth.Request()
     auth_req.ParseFromString(req_pkt.data)
 
-    # print('request username = %s, password = %s' % (auth_req.username, auth_req.password))
+    logging.debug('request username = %s, password = %s' % (auth_req.username, auth_req.password))
 
     auth_resp = Auth.Response()
     auth_resp.base_response.err_code = works_pb2.ERR_NONE
@@ -32,7 +33,7 @@ def application(env, start_response):
         encrypt=Packet.CRYPT_NONE,
         key='password')
 
-    return read_buf.write(start_response, resp_buf)
+    return read_buf.finish(start_response, resp_buf)
 
 
 

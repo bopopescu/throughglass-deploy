@@ -8,16 +8,18 @@ from model import usr_info, bind_accounts
 from wxapi import update_token
 
 import read_buf
+import logging
 
 
 def application(env, start_response):
-    req_buf = read_buf.read(env)
+    req_buf = read_buf.init(env)
 
     req_pkt = pack_utils.pre_decode(buf=req_buf)
     uin = req_pkt.uin
 
     usr = usr_info.query(uin)
     session = usr.get('session')
+    logging.info('session=%s, uin=%d' % (session, uin))
 
     req_pkt = pack_utils.decode(buf=req_buf, key=session)
     req = UpdateWeChatAccount.Request()
@@ -55,4 +57,4 @@ def application(env, start_response):
         uin=req_pkt.uin
     )
 
-    return read_buf.write(start_response, resp_buf)
+    return read_buf.finish(start_response, resp_buf)
