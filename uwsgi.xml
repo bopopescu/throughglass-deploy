@@ -3,9 +3,7 @@
     <socket>/run/uwsgi/app/throughglass.simcpux.info/throughglass.simcpux.info.socket</socket>
     <pythonpath>/home/kiro/throughglass/www/cgi-bin/</pythonpath>
     <app mountpoint="/cgi-bin/">
-        <script>auth</script>
-        <script>post</script>
-        <script>update_wechat_account</script>
+        <script>throughglass</script>
     </app>
     
     <master/>

@@ -11,9 +11,7 @@ import read_buf
 import logging
 
 
-def application(env, start_response):
-    req_buf = read_buf.init(env)
-
+def process(req_buf):
     req_pkt = pack_utils.pre_decode(buf=req_buf)
     uin = req_pkt.uin
 
@@ -56,5 +54,10 @@ def application(env, start_response):
         key=session,
         uin=req_pkt.uin
     )
+    return resp_buf
 
+
+def application(env, start_response):
+    req_buf = read_buf.init(env)
+    resp_buf = process(req_buf)
     return read_buf.finish(start_response, resp_buf)

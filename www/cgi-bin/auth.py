@@ -9,9 +9,7 @@ import read_buf
 import logging
 
 
-def application(env, start_response):
-    req_buf = read_buf.init(env)
-
+def process(req_buf):
     private_key = rsa.PrivateKey(
         11176276734117980437, 65537, 6939363295624337393, 12879322847, 867768971)
 
@@ -32,7 +30,12 @@ def application(env, start_response):
         cookie='',
         encrypt=Packet.CRYPT_NONE,
         key='password')
+    return resp_buf
 
+
+def application(env, start_response):
+    req_buf = read_buf.init(env)
+    resp_buf = process(req_buf)
     return read_buf.finish(start_response, resp_buf)
 
 
