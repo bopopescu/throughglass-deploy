@@ -2,20 +2,14 @@
 # -*- coding: UTF-8 -*-
 
 # enable debugging
-import cgitb
 import os
-from model import config
 import pickle
 import urllib2
 import json
-
 import datetime
 import time
 
-cgitb.enable()
-
-print "Content-Type: text/plain;charset=utf-8"
-print
+from model import config
 
 
 def load_token():

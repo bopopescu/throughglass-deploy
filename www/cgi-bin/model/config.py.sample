@@ -1,0 +1,20 @@
+# -*- coding: UTF-8 -*-
+
+ro_config = {
+    'user': '[user]',
+    'password': '[userpass]',
+    'host': 'localhost',
+    'database': 'throughglass'
+}
+
+rw_config = {
+    'user': '[user]',
+    'password': '[userpass]',
+    'host': 'localhost',
+    'database': 'throughglass'
+}
+
+wxapi_config = {
+    'app_id': '[app_id]',
+    'app_secret': '[app_secret]',
+}

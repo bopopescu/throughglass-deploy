@@ -6,7 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/testcase" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/www/cgi-bin" isTestSource="false" />
     </content>
-    <orderEntry type="inheritedJdk" />
+    <orderEntry type="jdk" jdkName="Python 2.7.5 (/usr/bin/python)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>

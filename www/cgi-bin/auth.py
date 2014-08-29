@@ -9,36 +9,30 @@ import read_buf
 
 
 def application(env, start_response):
-	req_buf = read_buf.read(env)
+    req_buf = read_buf.read(env)
 
-	private_key = rsa.PrivateKey(
-		11176276734117980437, 65537, 6939363295624337393, 12879322847, 867768971)
+    private_key = rsa.PrivateKey(
+        11176276734117980437, 65537, 6939363295624337393, 12879322847, 867768971)
 
-	req_pkt = pack_utils.decode(buf=req_buf, key=private_key)
-	auth_req = Auth.Request()
-	auth_req.ParseFromString(req_pkt.data)
+    req_pkt = pack_utils.decode(buf=req_buf, key=private_key)
+    auth_req = Auth.Request()
+    auth_req.ParseFromString(req_pkt.data)
 
-	# print('request username = %s, password = %s' % (auth_req.username, auth_req.password))
+    # print('request username = %s, password = %s' % (auth_req.username, auth_req.password))
 
-	auth_resp = Auth.Response()
-	auth_resp.base_response.err_code = works_pb2.ERR_NONE
-	auth_resp.base_response.err_str = 'good luck'
-	auth_resp.uin = 100000
-	auth_resp.session_key = 'hello'
+    auth_resp = Auth.Response()
+    auth_resp.base_response.err_code = works_pb2.ERR_NONE
+    auth_resp.base_response.err_str = 'good luck'
+    auth_resp.uin = 100000
+    auth_resp.session_key = 'hello'
 
-	resp_buf = pack_utils.encode(
-		buf=auth_resp.SerializeToString(),
-		cookie='',
-		encrypt=Packet.CRYPT_NONE,
-		key='password')
+    resp_buf = pack_utils.encode(
+        buf=auth_resp.SerializeToString(),
+        cookie='',
+        encrypt=Packet.CRYPT_NONE,
+        key='password')
 
-	# start response
-	response_headers = [
-		('Content-Type', 'text/plain')
-		('Content-Length', str(len(resp_buf)))
-	]
-	start_response('200 OK', response_headers)
-	return [resp_buf]
+    return read_buf.write(start_response, resp_buf)
 
 
 
