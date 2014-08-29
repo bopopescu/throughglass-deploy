@@ -15,6 +15,10 @@ from ye2pack.works_pb2 import Auth
 from ye2pack.pack_pb2 import Packet
 import rsa
 
+
+def application(env, start_response):
+
+    return []
 print "Content-Type: text/plain;charset=utf-8"
 print
 

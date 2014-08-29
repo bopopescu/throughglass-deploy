@@ -1,10 +1,11 @@
 <uwsgi>
-    <logger>file:/home/kiro/throughglass/logs/uwsgi/err.log</logger>
     <plugin>python</plugin>
     <socket>/run/uwsgi/app/throughglass.simcpux.info/throughglass.simcpux.info.socket</socket>
     <pythonpath>/home/kiro/throughglass/www/cgi-bin/</pythonpath>
-    <app mountpoint="/auth.py">
-        <script>auth.py</script>
+    <app mountpoint="/cgi-bin/">
+        <script>auth</script>
+        <script>post</script>
+        <script>update_wechat_account</script>
     </app>
     
     <master/>
