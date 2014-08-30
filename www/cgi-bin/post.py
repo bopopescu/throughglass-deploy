@@ -1,12 +1,12 @@
 # -*- coding: UTF-8 -*-
 
+import logging
+
 from ye2pack import pack_utils, works_pb2
 from ye2pack.works_pb2 import Post
 from ye2pack.pack_pb2 import Packet
 from model import usr_info, bind_accounts
 from wxapi import errors, timeline
-
-import logging
 
 
 def process(req_buf):
@@ -26,7 +26,7 @@ def process(req_buf):
         account_type='weixin.qq.com'
     )
 
-    err_code, err_str = timeline.post_multi(access_token, req.media_id, req.comment)
+    err_code, err_str, extra = timeline.post_multi(access_token, req.media_id, req.comment)
 
     # construct post response
     resp = Post.Response()
