@@ -56,7 +56,7 @@ def query_access_token(uin, account_type):
 
     sql_pattern = (
         "SELECT access_token FROM bindaccount "
-        "WHERE bind_hash = %(bind_hash)s"
+        "WHERE bind_hash = %(bind_hash)s "
     )
 
     sql_value = {
@@ -81,8 +81,8 @@ def renew_access_token(uin, account_type='weixin.qq.com'):
 
     # query refresh token
     sql_pattern = (
-        "SELECT refresh_token FROM bindaccount"
-        "WHERE bind_hash = %(bind_hash)s"
+        "SELECT refresh_token FROM bindaccount "
+        "WHERE bind_hash = %(bind_hash)s "
     )
 
     sql_value = {
@@ -106,7 +106,7 @@ def renew_access_token(uin, account_type='weixin.qq.com'):
     # update
     sql_pattern = (
         "UPDATE bindaccount SET refresh_token = %(refresh_token)s "
-        "WHERE bind_hash = %(bind_hash)s"
+        "WHERE bind_hash = %(bind_hash)s "
     )
 
     sql_value = {
