@@ -1,7 +1,6 @@
 # -*- coding: UTF-8 -*-
 import urllib2
 import logging
-
 import hashlib
 
 import mysql.connector
@@ -53,7 +52,7 @@ def query_access_token(uin, account_type):
     cnx = mysql.connector.connect(**config.ro_config)
     cursor = cnx.cursor()
 
-    bind_hash = hashlib.md5('u=%d,d=%s' % (uin, account_type)).hexdigest()
+    bind_hash = hashlib.md5("u=%d,d=%s" % (uin, account_type)).hexdigest()
 
     sql_pattern = (
         "SELECT access_token FROM bindaccount "
@@ -78,11 +77,11 @@ def renew_access_token(uin, account_type='weixin.qq.com'):
     cnx = mysql.connector.connect(**config.ro_config)
     cursor = cnx.cursor()
 
-    bind_hash = hashlib.md5('u=%d,d=%s' % (uin, account_type)).hexdigest()
+    bind_hash = hashlib.md5("u=%d,d=%s" % (uin, account_type)).hexdigest()
 
     # query refresh token
     sql_pattern = (
-        "SELECT refresh_token FROM bindaccount "
+        "SELECT refresh_token FROM bindaccount"
         "WHERE bind_hash = %(bind_hash)s"
     )
 
@@ -93,10 +92,10 @@ def renew_access_token(uin, account_type='weixin.qq.com'):
     cursor.execute(sql_pattern, sql_value)
     refresh_token = cursor.fetchone()
 
-    refresh_url = 'https://api.weixin.qq.com/sns/oauth2/refresh_token?appid=%s&grant_type=refresh_token&refresh_token=%s' % (
-        config.wxapi_config.get('app_id'),
-        refresh_token
-    )
+    refresh_url = (
+        u"https://api.weixin.qq.com/sns/oauth2/refresh_token?grant_type=refresh_token&appid=%s&refresh_token=%s"
+        % (config.wxapi_config.get('app_id'),
+           refresh_token))
 
     err_code, err_str = errors.parse_error(urllib2.urlopen(refresh_url).read())
     logging.debug('refresh access token, url = %s, err = %d' % (refresh_url, err_code))
