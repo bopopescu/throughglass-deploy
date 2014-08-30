@@ -58,8 +58,12 @@ def get_token():
 
     check_time = time.mktime(datetime.datetime.now().timetuple()) - token_info[2]
 
-    if token_info[2] < check_time:
+    if token_info[1] < check_time:
         token_info = update_token()
+        logging.debug('update token from wechat, checktime = %d' % check_time)
+
+    else:
+        logging.debug('loading token from cache, checktime = %d' % check_time)
 
     return token_info[0]
 
