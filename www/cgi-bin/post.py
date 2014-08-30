@@ -27,6 +27,7 @@ def process(req_buf):
     )
 
     err_code, err_str, extra = timeline.post_multi(access_token, req.media_id, req.comment)
+    logging.debug("try timeline post err = %d, %s" % (err_code, err_str))
 
     # construct post response
     resp = Post.Response()
