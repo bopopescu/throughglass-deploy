@@ -48,7 +48,7 @@ def process(req_buf):
             logging.debug("renewed user access token, %s" % access_token)
 
             # post again
-            resp.base_response.err_code, resp.base_response.err_str = timeline.post_multi(
+            resp.base_response.err_code, resp.base_response.err_str, extra = timeline.post_multi(
                 access_token, req.media_id, req.comment)
 
         else:
