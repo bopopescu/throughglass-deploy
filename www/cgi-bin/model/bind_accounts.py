@@ -1,8 +1,6 @@
-#!/usr/bin/env python
 # -*- coding: UTF-8 -*-
 import urllib2
-
-__author__ = 'yowenlove'
+import logging
 
 import hashlib
 
@@ -101,6 +99,8 @@ def renew_access_token(uin, account_type='weixin.qq.com'):
     )
 
     err_code, err_str = errors.parse_error(urllib2.urlopen(refresh_url).read())
+    logging.debug('refresh access token, url = %s, err = %d' % (refresh_url, err_code))
+
     if err_code != errors.ERR_NONE:
         return err_code, err_str
 
