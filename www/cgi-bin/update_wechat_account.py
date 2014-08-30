@@ -5,7 +5,7 @@ from ye2pack import pack_utils, works_pb2
 from ye2pack.pack_pb2 import Packet
 from ye2pack.works_pb2 import UpdateWeChatAccount
 from model import usr_info, bind_accounts
-from wxapi import update_token
+from wxapi import token
 
 import read_buf
 import logging
@@ -24,8 +24,7 @@ def process(req_buf):
     req.ParseFromString(req_pkt.data)
 
     # update from wechat server
-    _info = update_token.update_user_token(req.code)
-    # _info = update_token.__test__update_user_token(req.code)
+    _info = token.authorize_code(req.code)
 
     # prepare for return
     resp = UpdateWeChatAccount.Response()

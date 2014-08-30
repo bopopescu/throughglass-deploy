@@ -5,7 +5,7 @@ from ye2pack import pack_utils, works_pb2
 from ye2pack.pack_pb2 import Packet
 from ye2pack.works_pb2 import GetWeChatUploadToken
 from model import usr_info
-from wxapi import update_token
+from wxapi import token
 
 
 def process(req_buf):
@@ -21,7 +21,7 @@ def process(req_buf):
 
     resp = GetWeChatUploadToken.Response()
     resp.base_response.err_code = works_pb2.ERR_NONE
-    resp.token = update_token.get_token()
+    resp.token = token.get_token()
 
     resp_buf = pack_utils.encode(
         buf=resp.SerializeToString(),

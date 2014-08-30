@@ -81,4 +81,10 @@ def parse_error(result):
     j = json.loads(result)
     err_code = j.get('errcode')
     err_str = j.get('errmsg')
-    return err_code, err_str
+
+    if err_code is None:
+        err_code = ERR_NONE
+    if err_str is None:
+        err_str = ''
+
+    return err_code, err_str, j

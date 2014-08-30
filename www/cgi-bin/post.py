@@ -1,12 +1,12 @@
 # -*- coding: UTF-8 -*-
 
-import urllib2
-
 from ye2pack import pack_utils, works_pb2
 from ye2pack.works_pb2 import Post
 from ye2pack.pack_pb2 import Packet
 from model import usr_info, bind_accounts
-from wxapi import errors
+from wxapi import errors, timeline
+
+import logging
 
 
 def process(req_buf):
@@ -26,18 +26,7 @@ def process(req_buf):
         account_type='weixin.qq.com'
     )
 
-    url = ('http://api.weixin.qq.com/sns/timeline/multi?access_token=%s' % access_token)
-
-    media_set = ('{"media_id":"%s"}' % req.media_id[0])
-    for i in req.media_id[1:]:
-        media_set = media_set + (', {"media_id":"%s"}' % i)
-
-    values = ('{"type":"image", "description":"%s", "image_list": [%s]' % (req.comment, media_set))
-
-    http_request = urllib2.Request(url, values)
-    http_response = urllib2.urlopen(http_request)
-    result = http_response.read()
-    err_code, err_str = errors.parse_error(result)
+    err_code, err_str = timeline.post_multi(access_token, req.media_id, req.comment)
 
     # construct post response
     resp = Post.Response()
@@ -48,8 +37,24 @@ def process(req_buf):
         resp.base_response.err_str = 'good luck'
 
     elif err_code == errors.ERR_ACCESS_TOKEN_EXPIRED:
-        bind_accounts.renew_access_token(uin)
-        resp.base_response.err_code, resp.base_response.err_str = errors.parse_error(urllib2.urlopen(url).read())
+        # access token expired, renew it
+        resp.base_response.err_code, resp.base_response.err_str = bind_accounts.renew_access_token(uin)
+        if resp.base_response.err_code == errors.ERR_NONE:
+            access_token = bind_accounts.query_access_token(
+                uin=req.base_request.uin,
+                account_type='weixin.qq.com'
+            )
+            logging.debug("renewed user access token, %s" % access_token)
+
+            # post again
+            resp.base_response.err_code, resp.base_response.err_str = timeline.post_multi(
+                access_token, req.media_id, req.comment)
+
+        else:
+            # renew failed
+            logging.debug("renewed user access token failed, err = %d, %s"
+                          % (resp.base_response.err_code,
+                             resp.base_response.err_str))
 
     else:
         resp.base_response.err_code = err_code

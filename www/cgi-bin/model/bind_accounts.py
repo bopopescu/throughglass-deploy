@@ -1,11 +1,9 @@
 # -*- coding: UTF-8 -*-
-import urllib2
-import logging
 import hashlib
 
 import mysql.connector
 import config
-from wxapi import errors
+from wxapi import errors, token
 
 
 def update(uin, openid, access_token, refresh_token, expires_in, account_type='weixin.qq.com', display='', extra=''):
@@ -92,32 +90,30 @@ def renew_access_token(uin, account_type='weixin.qq.com'):
     cursor.execute(sql_pattern, sql_value)
     refresh_token = cursor.fetchone()[0]
 
-    refresh_url = (
-        "https://api.weixin.qq.com/sns/oauth2/refresh_token?grant_type=refresh_token&appid=%s&refresh_token=%s"
-        % (config.wxapi_config.get('app_id'),
-           refresh_token))
-
-    err_code, err_str = errors.parse_error(urllib2.urlopen(refresh_url).read())
-    logging.debug('refresh access token, url = %s, err = %d' % (refresh_url, err_code))
+    err_code, err_str, extra = token.refresh_user_token(refresh_token)
 
     if err_code != errors.ERR_NONE:
         return err_code, err_str
 
     # update
     sql_pattern = (
-        "UPDATE bindaccount SET refresh_token = %(refresh_token)s "
+        "UPDATE bindaccount SET "
+        "refresh_token = %(refresh_token)s, "
+        "access_token = %(access_token)s, "
+        "expires_in = %(expires_in)s "
         "WHERE bind_hash = %(bind_hash)s "
     )
 
     sql_value = {
-        'bind_hash': bind_hash
+        'access_token': extra.get('access_token'),
+        'refresh_token': extra.get('refresh_token'),
+        'expires_in': extra.get('expires_in'),
+        'bind_hash': bind_hash,
     }
 
     cursor.execute(sql_pattern, sql_value)
-
     cnx.commit()
 
     cursor.close()
     cnx.close()
-
     return errors.ERR_NONE, ''
