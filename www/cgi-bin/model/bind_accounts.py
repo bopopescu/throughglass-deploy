@@ -76,7 +76,7 @@ def query_access_token(uin, account_type):
     return data[0]
 
 
-def renew_access_token(uin, account_type):
+def renew_access_token(uin, account_type='weixin.qq.com'):
     cnx = mysql.connector.connect(**config.ro_config)
     cursor = cnx.cursor()
 
