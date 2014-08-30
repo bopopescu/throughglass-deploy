@@ -90,10 +90,10 @@ def renew_access_token(uin, account_type='weixin.qq.com'):
     }
 
     cursor.execute(sql_pattern, sql_value)
-    refresh_token = cursor.fetchone()
+    refresh_token = cursor.fetchone()[0]
 
     refresh_url = (
-        u"https://api.weixin.qq.com/sns/oauth2/refresh_token?grant_type=refresh_token&appid=%s&refresh_token=%s"
+        "https://api.weixin.qq.com/sns/oauth2/refresh_token?grant_type=refresh_token&appid=%s&refresh_token=%s"
         % (config.wxapi_config.get('app_id'),
            refresh_token))
 
